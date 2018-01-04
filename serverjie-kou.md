@@ -127,7 +127,23 @@ public class SimpleServer implements Server {
 
 再为单元测试添加断言：
 
+```java
+public class TestServer {
+	private static final Server SERVER = ServerFactory.getServer();
 
+	@Test
+	public void testServerStart() {
+		SERVER.start();
+		assertTrue("服务器启动后，状态是STARTED",SERVER.getStatus().equals(ServerStatus.STARTED));
+	}
+
+	@Test
+	public void testServerStop() {
+		SERVER.stop();
+        assertTrue("服务器关闭后，状态是STOPED",SERVER.getStatus().equals(ServerStatus.STOPED));
+	}
+}
+```
 
 再继续看Server接口，要接受客户端的请求，需要监听本地端口。
 
