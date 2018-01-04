@@ -98,7 +98,32 @@ public class TestServer {
 
 重构Server，添加getStatus接口，返回Server状态，状态应是枚举，暂定STARTED、STOPED两种，只有调用了start方法后，状态才会变为STARTED。
 
+Server重构后如下：
 
+```java
+public class SimpleServer implements Server {
+
+    private ServerStatus serverStatus = ServerStatus.STOPED;
+
+	@Override
+	public void start() {
+	    this.serverStatus = ServerStatus.STARTED;
+		System.out.println("Server start");
+	}
+
+	@Override
+	public void stop() {
+	    this.serverStatus = ServerStatus.STOPED;
+		System.out.println("Server stop");
+	}
+
+	@Override
+	public ServerStatus getStatus() {
+		return serverStatus;
+	}
+
+}
+```
 
 再继续看Server接口，要接受客户端的请求，需要监听本地端口。
 
