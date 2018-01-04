@@ -105,25 +105,29 @@ public class SimpleServer implements Server {
 
     private ServerStatus serverStatus = ServerStatus.STOPED;
 
-	@Override
-	public void start() {
-	    this.serverStatus = ServerStatus.STARTED;
-		System.out.println("Server start");
-	}
+    @Override
+    public void start() {
+        this.serverStatus = ServerStatus.STARTED;
+        System.out.println("Server start");
+    }
 
-	@Override
-	public void stop() {
-	    this.serverStatus = ServerStatus.STOPED;
-		System.out.println("Server stop");
-	}
+    @Override
+    public void stop() {
+        this.serverStatus = ServerStatus.STOPED;
+        System.out.println("Server stop");
+    }
 
-	@Override
-	public ServerStatus getStatus() {
-		return serverStatus;
-	}
+    @Override
+    public ServerStatus getStatus() {
+        return serverStatus;
+    }
 
 }
 ```
+
+再为单元测试添加断言：
+
+
 
 再继续看Server接口，要接受客户端的请求，需要监听本地端口。
 
