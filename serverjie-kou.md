@@ -78,21 +78,27 @@ public class ServerFactory {
 
 ```java
 public class TestServer {
-	private static final Server SERVER = ServerFactory.getServer();
+    private static final Server SERVER = ServerFactory.getServer();
 
-	@BeforeClass
+    @BeforeClass
 
-	@Test
-	public void testServerStart() {
-		SERVER.start();
-	}
+    @Test
+    public void testServerStart() {
+        SERVER.start();
+    }
 
-	@Test
-	public void testServerStop() {
-		SERVER.stop();
-	}
+    @Test
+    public void testServerStop() {
+        SERVER.stop();
+    }
 }
 ```
 
+再看单元测试，没法写assert断言啊，难道要用客户端请求下才知道Server的启停状态？Server要自己提供状态查询接口。
 
+重构Server，添加getStatus接口，返回Server状态，状态应是枚举，暂定STARTED、STOPED两种，只有调用了start方法后，状态才会变为STARTED。
+
+
+
+再继续看Server接口，要接受客户端的请求，需要监听本地端口。
 
