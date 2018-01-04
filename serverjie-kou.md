@@ -190,20 +190,20 @@ public class SimpleServer implements Server {
 ```java
 public class ServerConfig {
 
-	public static final int DEFAULT_PORT = 18080;
-	private final int port;
+    public static final int DEFAULT_PORT = 18080;
+    private final int port;
 
-	public ServerConfig(int PORT) {
-		this.port = PORT;
-	}
+    public ServerConfig(int PORT) {
+        this.port = PORT;
+    }
 
-	public ServerConfig() {
-		this.port = DEFAULT_PORT;
-	}
+    public ServerConfig() {
+        this.port = DEFAULT_PORT;
+    }
 
-	public int getPort() {
-		return port;
-	}
+    public int getPort() {
+        return port;
+    }
 }
 ```
 
@@ -212,34 +212,34 @@ Server重构，修改构造函数
 ```java
 public class SimpleServer implements Server {
 
-	private ServerStatus serverStatus = ServerStatus.STOPED;
-	private final int port;
+    private ServerStatus serverStatus = ServerStatus.STOPED;
+    private final int port;
 
-	public SimpleServer(ServerConfig serverConfig) {
-		this.port = serverConfig.getPort();
-	}
+    public SimpleServer(ServerConfig serverConfig) {
+        this.port = serverConfig.getPort();
+    }
 
-	@Override
-	public void start() {
-		this.serverStatus = ServerStatus.STARTED;
-		System.out.println("Server start");
-	}
+    @Override
+    public void start() {
+        this.serverStatus = ServerStatus.STARTED;
+        System.out.println("Server start");
+    }
 
-	@Override
-	public void stop() {
-		this.serverStatus = ServerStatus.STOPED;
-		System.out.println("Server stop");
-	}
+    @Override
+    public void stop() {
+        this.serverStatus = ServerStatus.STOPED;
+        System.out.println("Server stop");
+    }
 
-	@Override
-	public ServerStatus getStatus() {
-		return serverStatus;
-	}
+    @Override
+    public ServerStatus getStatus() {
+        return serverStatus;
+    }
 
-	@Override
-	public int getPort() {
-		return port;
-	}
+    @Override
+    public int getPort() {
+        return port;
+    }
 }
 ```
 
@@ -247,13 +247,13 @@ ServerFactory重构
 
 ```java
 public class ServerFactory {
-	/**
-	 * 返回Server实例
-	 * @return
-	 */
-	public static Server getServer(ServerConfig serverConfig) {
-		return new SimpleServer(serverConfig);
-	}
+    /**
+     * 返回Server实例
+     * @return
+     */
+    public static Server getServer(ServerConfig serverConfig) {
+        return new SimpleServer(serverConfig);
+    }
 }
 ```
 
@@ -261,31 +261,31 @@ public class ServerFactory {
 
 ```java
 public class TestServer {
-	private static Server server;
+    private static Server server;
 
-	@BeforeClass
-	public static void init() {
-		ServerConfig serverConfig = new ServerConfig();
-		server = ServerFactory.getServer(serverConfig);
-	}
+    @BeforeClass
+    public static void init() {
+        ServerConfig serverConfig = new ServerConfig();
+        server = ServerFactory.getServer(serverConfig);
+    }
 
-	@Test
-	public void testServerStart() {
-		server.start();
-		assertTrue("服务器启动后，状态是STARTED", server.getStatus().equals(ServerStatus.STARTED));
-	}
+    @Test
+    public void testServerStart() {
+        server.start();
+        assertTrue("服务器启动后，状态是STARTED", server.getStatus().equals(ServerStatus.STARTED));
+    }
 
-	@Test
-	public void testServerStop() {
-		server.stop();
-		assertTrue("服务器关闭后，状态是STOPED", server.getStatus().equals(ServerStatus.STOPED));
-	}
+    @Test
+    public void testServerStop() {
+        server.stop();
+        assertTrue("服务器关闭后，状态是STOPED", server.getStatus().equals(ServerStatus.STOPED));
+    }
 
-	@Test
-	public void testServerPort() {
-		int port = server.getPort();
-		assertTrue("默认端口号", ServerConfig.DEFAULT_PORT == port);
-	}
+    @Test
+    public void testServerPort() {
+        int port = server.getPort();
+        assertTrue("默认端口号", ServerConfig.DEFAULT_PORT == port);
+    }
 }
 ```
 
@@ -294,4 +294,6 @@ public class TestServer {
 ![](/assets/TestServer.jpg)
 
 OK，经过多轮重构，Server接口编写暂时完成。下一步开始实现真正有用的功能。
+
+完整代码：https://github.com/pkpk1234/BeggarServletContainer
 
