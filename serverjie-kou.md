@@ -44,19 +44,19 @@ public class SimpleServer implements Server {
 
 ```java
 public class TestServer {
-	private static final Server SERVER = new SimpleServer();
+    private static final Server SERVER = new SimpleServer();
 
-	@BeforeClass
+    @BeforeClass
 
-	@Test
-	public void testServerStart() {
-		SERVER.start();
-	}
+    @Test
+    public void testServerStart() {
+        SERVER.start();
+    }
 
-	@Test
-	public void testServerStop() {
-		SERVER.stop();
-	}
+    @Test
+    public void testServerStop() {
+        SERVER.stop();
+    }
 }
 ```
 
@@ -71,6 +71,26 @@ public class ServerFactory {
     public static Server getServer() {
         return new SimpleServer();
     }
+}
+```
+
+单元测试重构后如下：这样就将接口和具体实现隔离开了，代码更加灵活。
+
+```java
+public class TestServer {
+	private static final Server SERVER = ServerFactory.getServer();
+
+	@BeforeClass
+
+	@Test
+	public void testServerStart() {
+		SERVER.start();
+	}
+
+	@Test
+	public void testServerStop() {
+		SERVER.stop();
+	}
 }
 ```
 
