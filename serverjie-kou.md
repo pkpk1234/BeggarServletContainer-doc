@@ -129,21 +129,61 @@ public class SimpleServer implements Server {
 
 ```java
 public class TestServer {
-	private static final Server SERVER = ServerFactory.getServer();
+    private static final Server SERVER = ServerFactory.getServer();
 
-	@Test
-	public void testServerStart() {
-		SERVER.start();
-		assertTrue("服务器启动后，状态是STARTED",SERVER.getStatus().equals(ServerStatus.STARTED));
+    @Test
+    public void testServerStart() {
+        SERVER.start();
+        assertTrue("服务器启动后，状态是STARTED",SERVER.getStatus().equals(ServerStatus.STARTED));
+    }
+
+    @Test
+    public void testServerStop() {
+        SERVER.stop();
+        assertTrue("服务器关闭后，状态是STOPED",SERVER.getStatus().equals(ServerStatus.STOPED));
+    }
+}
+```
+
+再继续看Server接口，要接受客户端的请求，需要监听本地端口，端口应该作为构造参数传入，并且Server应该具有默认的端口。再继续重构。
+
+```java
+public class SimpleServer implements Server {
+
+	private ServerStatus serverStatus = ServerStatus.STOPED;
+	public final int DEFAULT_PORT = 18080;
+	private final int PORT;
+
+	public SimpleServer(int PORT) {
+		this.PORT = PORT;
 	}
 
-	@Test
-	public void testServerStop() {
-		SERVER.stop();
-        assertTrue("服务器关闭后，状态是STOPED",SERVER.getStatus().equals(ServerStatus.STOPED));
+	public SimpleServer() {
+		this.PORT = DEFAULT_PORT;
+	}
+
+	@Override
+	public void start() {
+		this.serverStatus = ServerStatus.STARTED;
+		System.out.println("Server start");
+	}
+
+	@Override
+	public void stop() {
+		this.serverStatus = ServerStatus.STOPED;
+		System.out.println("Server stop");
+	}
+
+	@Override
+	public ServerStatus getStatus() {
+		return serverStatus;
+	}
+
+	public int getPORT() {
+		return PORT;
 	}
 }
 ```
 
-再继续看Server接口，要接受客户端的请求，需要监听本地端口。
+
 
