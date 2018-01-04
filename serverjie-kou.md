@@ -150,16 +150,73 @@ public class TestServer {
 ```java
 public class SimpleServer implements Server {
 
-	private ServerStatus serverStatus = ServerStatus.STOPED;
-	public final int DEFAULT_PORT = 18080;
-	private final int PORT;
+    private ServerStatus serverStatus = ServerStatus.STOPED;
+    public final int DEFAULT_PORT = 18080;
+    private final int PORT;
 
-	public SimpleServer(int PORT) {
-		this.PORT = PORT;
+    public SimpleServer(int PORT) {
+        this.PORT = PORT;
+    }
+
+    public SimpleServer() {
+        this.PORT = DEFAULT_PORT;
+    }
+
+    @Override
+    public void start() {
+        this.serverStatus = ServerStatus.STARTED;
+        System.out.println("Server start");
+    }
+
+    @Override
+    public void stop() {
+        this.serverStatus = ServerStatus.STOPED;
+        System.out.println("Server stop");
+    }
+
+    @Override
+    public ServerStatus getStatus() {
+        return serverStatus;
+    }
+
+    public int getPORT() {
+        return PORT;
+    }
+}
+```
+
+问题又来了，ServerFactory没法传端口，最简单的方法是修改ServerFactory.getServer\(\)方法，增加一个端口参数。但是以后要为Server指定管理端口怎么办，又加参数？大师说NO，用配置类，为配置类加属性就行了。
+
+```java
+public class ServerConfig {
+
+	public static final int DEFAULT_PORT = 18080;
+	private final int port;
+
+	public ServerConfig(int PORT) {
+		this.port = PORT;
 	}
 
-	public SimpleServer() {
-		this.PORT = DEFAULT_PORT;
+	public ServerConfig() {
+		this.port = DEFAULT_PORT;
+	}
+
+	public int getPort() {
+		return port;
+	}
+}
+```
+
+Server重构，修改构造函数
+
+```java
+public class SimpleServer implements Server {
+
+	private ServerStatus serverStatus = ServerStatus.STOPED;
+	private final int port;
+
+	public SimpleServer(ServerConfig serverConfig) {
+		this.port = serverConfig.getPort();
 	}
 
 	@Override
@@ -179,11 +236,62 @@ public class SimpleServer implements Server {
 		return serverStatus;
 	}
 
-	public int getPORT() {
-		return PORT;
+	@Override
+	public int getPort() {
+		return port;
 	}
 }
 ```
 
+ServerFactory重构
 
+```java
+public class ServerFactory {
+	/**
+	 * 返回Server实例
+	 * @return
+	 */
+	public static Server getServer(ServerConfig serverConfig) {
+		return new SimpleServer(serverConfig);
+	}
+}
+```
+
+单元测试重构
+
+```java
+public class TestServer {
+	private static Server server;
+
+	@BeforeClass
+	public static void init() {
+		ServerConfig serverConfig = new ServerConfig();
+		server = ServerFactory.getServer(serverConfig);
+	}
+
+	@Test
+	public void testServerStart() {
+		server.start();
+		assertTrue("服务器启动后，状态是STARTED", server.getStatus().equals(ServerStatus.STARTED));
+	}
+
+	@Test
+	public void testServerStop() {
+		server.stop();
+		assertTrue("服务器关闭后，状态是STOPED", server.getStatus().equals(ServerStatus.STOPED));
+	}
+
+	@Test
+	public void testServerPort() {
+		int port = server.getPort();
+		assertTrue("默认端口号", ServerConfig.DEFAULT_PORT == port);
+	}
+}
+```
+
+跑下测试：
+
+![](/assets/TestServer.jpg)
+
+OK，经过多轮重构，Server接口编写暂时完成。下一步开始实现真正有用的功能。
 
