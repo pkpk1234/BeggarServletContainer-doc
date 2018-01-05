@@ -128,7 +128,7 @@ try {
 }
 ```
 
-了。大师还说了，如果Server.start\(\)时端口被占用、权限不足，start方法根本没有抛出异常嘛，调用者难道像SB一样一直等下去，还有，Socket如果异常了，while\(true\)就退出了，难道一个Socket异常，整个服务器就都挂了，滚去重构。
+了。大师还说了，如果Server.start\(\)时端口被占用、权限不足，start方法根本没有抛出异常嘛，调用者难道像SB一样一直等下去，还有，Socket如果异常了，while\(true\)就退出了，难道一个Socket异常，整个服务器就都挂了，这代码就是一坨屎嘛，滚去重构。
 
 首先为ServerStatus属性添加volatile，保证其可见性。
 
@@ -144,8 +144,6 @@ public class SimpleServer implements Server {
 然后引入sl4j+log4j2，替换掉漫天的System.out.println。
 
 然后编写closeQuietly方法，专门处理socket的关闭。
-
-
 
 最后start方法异常时，需要让调用者得到通知。
 
