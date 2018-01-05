@@ -4,32 +4,103 @@
 
 关于Socket和ServerSocket怎么用，网上很多文章写得比我好，大家自己找找就好。
 
-
-
 代码写起来很简单：
 
 ```java
 public class SimpleServer implements Server {
 
-	... ...
-	@Override
-	public void start() {
-		Socket socket = null;
-		try {
-			this.serverSocket = new ServerSocket(this.port);
-			this.serverStatus = ServerStatus.STARTED;
-			System.out.println("Server start");
-			while (true) {
-				socket = serverSocket.accept();// 从连接队列中取出一个连接，如果没有则等待
-				System.out.println(
-						"新增连接：" + socket.getInetAddress() + ":" + socket.getPort());
+    ... ...
+    @Override
+    public void start() {
+        Socket socket = null;
+        try {
+            this.serverSocket = new ServerSocket(this.port);
+            this.serverStatus = ServerStatus.STARTED;
+            System.out.println("Server start");
+            while (true) {
+                socket = serverSocket.accept();// 从连接队列中取出一个连接，如果没有则等待
+                System.out.println(
+                        "新增连接：" + socket.getInetAddress() + ":" + socket.getPort());
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (socket != null) {
+                try {
+                    socket.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void stop() {
+        try {
+            if (this.serverSocket != null) {
+                this.serverSocket.close();
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.serverStatus = ServerStatus.STOPED;
+        System.out.println("Server stop");
+    }
+
+    ... ...
+}
+```
+
+添加单元测试：
+
+```java
+public class TestServerAcceptRequest {
+	private static Server server;
+	// 设置超时时间为500毫秒
+	private static final int TIMEOUT = 500;
+
+	@BeforeClass
+	public static void init() {
+		ServerConfig serverConfig = new ServerConfig();
+		server = ServerFactory.getServer(serverConfig);
+	}
+
+	@Test
+	public void testServerAcceptRequest() {
+		// 如果server没有启动，首先启动server
+		if (server.getStatus().equals(ServerStatus.STOPED)) {
+            //在另外一个线程中启动server
+		    new Thread(() -> {
+				server.start();
+			});
+            //如果server未启动，就sleep一下
+			while (server.getStatus().equals(ServerStatus.STOPED)) {
+                System.out.println("等待server启动");
+			    try {
+					Thread.sleep(500);
+				}
+				catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		finally {
-			if (socket != null) {
+			Socket socket = new Socket();
+			SocketAddress endpoint = new InetSocketAddress("localhost",
+					ServerConfig.DEFAULT_PORT);
+			try {
+				// 试图发送请求到服务器，超时时间为TIMEOUT
+				socket.connect(endpoint, TIMEOUT);
+				assertTrue("服务器启动后，能接受请求", socket.isConnected());
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+			finally {
 				try {
 					socket.close();
 				}
@@ -38,28 +109,27 @@ public class SimpleServer implements Server {
 				}
 			}
 		}
-
 	}
 
-	@Override
-	public void stop() {
-		try {
-			if (this.serverSocket != null) {
-				this.serverSocket.close();
-			}
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		this.serverStatus = ServerStatus.STOPED;
-		System.out.println("Server stop");
+	@AfterClass
+	public static void destroy() {
+		server.stop();
 	}
-
-	... ...
 }
 ```
 
-添加单元测试：
+运行单元测试，我檫，怎么偶尔一直输出“等待server启动"，用大师的话说就算”只看见轮子转，不见车跑“。原因其实很简单，因为多线程咯，测试线程一直无法获取到另外一个线程中g更新的值。大师又说了，早看不惯满天的System.out.println和到处重复的
+
+```
+try {
+    socket.close();
+} catch (IOException e) {
+    e.printStackTrace();
+}
+
+```
+
+了，重构去。
 
 
 
