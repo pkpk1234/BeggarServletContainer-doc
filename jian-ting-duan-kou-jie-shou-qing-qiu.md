@@ -136,7 +136,7 @@ try {
 
 ```java
 public class SimpleServer implements Server {
-	private volatile ServerStatus serverStatus = ServerStatus.STOPED;
+    private volatile ServerStatus serverStatus = ServerStatus.STOPED;
 ... ...
 }
 ```
