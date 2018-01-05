@@ -132,11 +132,20 @@ try {
 
 首先为ServerStatus属性添加volatile，保证其可见性。
 
+代码片段：
+
+```java
+public class SimpleServer implements Server {
+	private volatile ServerStatus serverStatus = ServerStatus.STOPED;
+... ...
+}
+```
+
 然后引入sl4j+log4j2，替换掉漫天的System.out.println。
 
 然后编写closeQuietly方法，专门处理socket的关闭。
 
+
+
 最后start方法异常时，需要让调用者得到通知。
-
-
 
