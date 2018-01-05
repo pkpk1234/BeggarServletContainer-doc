@@ -145,5 +145,7 @@ public class SimpleServer implements Server {
 
 然后编写closeQuietly方法，专门处理socket的关闭。
 
+
+
 最后start方法异常时，需要让调用者得到通知。
 
