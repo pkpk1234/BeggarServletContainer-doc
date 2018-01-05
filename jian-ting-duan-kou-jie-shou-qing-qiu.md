@@ -4,7 +4,7 @@
 
 关于Socket和ServerSocket怎么用，网上很多文章写得比我好，大家自己找找就好。
 
-代码写起来很简单：
+代码写起来很简单：（下面的代码片段有很多问题哦，大神们请不要急着喷，看完再抽）
 
 ```java
 public class SimpleServer implements Server {
@@ -128,7 +128,9 @@ try {
 }
 ```
 
-了。大师还说了，如果Server.start\(\)时端口被占用、权限不足，start方法根本没有抛出异常嘛，调用者难道像SB一样一直等下去，还有，Socket如果异常了，while\(true\)就退出了，难道一个Socket异常，整个服务器就都挂了，这代码就是一坨屎嘛，滚去重构。
+了。
+
+大师还说了，代码太垃圾了，问题很多：如果Server.start\(\)时端口被占用、权限不足，start方法根本没有抛出异常嘛，调用者难道像SB一样一直等下去，还有，Socket如果异常了，while\(true\)就退出了，难道一个Socket异常，整个服务器就都挂了，这代码就是一坨屎嘛，滚去重构。
 
 首先为ServerStatus属性添加volatile，保证其可见性。
 
@@ -168,7 +170,15 @@ public class IoUtils {
 
 最后start方法异常时，需要让调用者得到通知，并且一个Socket异常，不影响整个服务器。
 
-重构后再跑单元测试：
+重构后再跑单元测试：一切OK
 
+![](/assets/TestServerAcceptRequest.jpg)
 
+到目前为止，一个单线程的可以接收请求的Server就完成了。
+
+完整代码：https://github.com/pkpk1234/BeggarServletContainer/tree/step2
+
+分支step2
+
+![](/assets/git-br-step2.jpg)
 
