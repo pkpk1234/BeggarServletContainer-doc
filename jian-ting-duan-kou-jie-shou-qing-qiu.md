@@ -78,7 +78,7 @@ public class TestServerAcceptRequest {
             //在另外一个线程中启动server
             new Thread(() -> {
                 server.start();
-            });
+            }).run();
             //如果server未启动，就sleep一下
             while (server.getStatus().equals(ServerStatus.STOPED)) {
                 System.out.println("等待server启动");
@@ -120,7 +120,7 @@ public class TestServerAcceptRequest {
 
 运行单元测试，我檫，怎么偶尔一直输出“等待server启动"，用大师的话说就算”只看见轮子转，不见车跑“。原因其实很简单，因为多线程咯，测试线程一直无法获取到另外一个线程中更新的值。大师又说了，早看不惯满天的System.out.println和到处重复的
 
-```
+```java
 try {
     socket.close();
 } catch (IOException e) {
@@ -128,5 +128,15 @@ try {
 }
 ```
 
-了，重构去。
+了。大师还说了，如果Server.start\(\)时端口被占用、权限不足，start方法根本没有抛出异常嘛，调用者难道像SB一样一直等下去，这代码就是一坨屎嘛，滚去重构。
+
+首先为ServerStatus属性添加volatile，保证其可见性。
+
+然后引入sl4j+log4j2，替换掉漫天的System.out.println。
+
+然后编写closeQuietly方法，专门处理socket的关闭。
+
+最后start方法异常时，需要让调用者得到通知。
+
+
 
