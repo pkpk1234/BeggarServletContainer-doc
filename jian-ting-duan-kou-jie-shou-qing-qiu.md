@@ -145,5 +145,30 @@ public class SimpleServer implements Server {
 
 然后编写closeQuietly方法，专门处理socket的关闭。
 
+```java
+public class IoUtils {
+
+    private static Logger logger = LoggerFactory.getLogger(IoUtils.class);
+
+    /**
+     * 安静地关闭，不抛出异常
+     * @param closeable
+     */
+    public static void closeQuietly(Closeable closeable) {
+        if(closeable != null) {
+            try {
+                closeable.close();
+            } catch (IOException e) {
+                logger.error(e.getMessage(),e);
+            }
+        }
+    }
+}
+```
+
 最后start方法异常时，需要让调用者得到通知，并且一个Socket异常，不影响整个服务器。
+
+重构后再跑单元测试：
+
+
 
