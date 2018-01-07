@@ -53,7 +53,7 @@ public class SocketEventListener implements EventListener<Socket> {
     }
 ```
 
-重构Connector，添加事件机制
+重构Connector，添加事件机制，注意whenAccept方法调用了eventListener
 
 ```java
 public class SocketConnector extends Connector<Socket> {
@@ -95,7 +95,7 @@ public class SocketConnector extends Connector<Socket> {
 
 ```java
 public class ServerFactory {
-    
+
     public static Server getServer(ServerConfig serverConfig) {
         List<Connector> connectorList = new ArrayList<>();
         SocketEventListener socketEventListener = new SocketEventListener();
@@ -106,6 +106,12 @@ public class ServerFactory {
     }
 }
 ```
+
+再运行所有单元测试，一切都OK。
+
+现在让我们来操作socket，实现一个echo功能的server吧。
+
+直接添加：
 
 
 
