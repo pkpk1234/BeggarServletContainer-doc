@@ -41,5 +41,17 @@ public interface EventListener<T> {
 }
 ```
 
+为Socket事件实现一下，acceptConnect中打印日志的语句可以移动到这来
+
+```java
+public class SocketEventListener implements EventListener<Socket> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SocketEventListener.class);
+
+    @Override
+    public void onEvent(Socket socket) throws EventException {
+        LOGGER.info("新增连接：" + socket.getInetAddress() + ":" + socket.getPort());
+    }
+```
+
 
 
