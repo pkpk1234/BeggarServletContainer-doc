@@ -28,5 +28,18 @@
 
 OK，让我们按照这个思路来重构一下，目的就是加入事件机制，并将对具体实现的依赖控制在那几个工厂类里面去。
 
+新增接口EventListener接口进行事件监听
+
+```java
+public interface EventListener<T> {
+    /**
+     * 事件发生时的回调方法
+     * @param event 事件对象
+     * @throws EventException 处理事件时异常都转换为该异常抛出
+     */
+    void onEvent(T event) throws EventException;
+}
+```
+
 
 
