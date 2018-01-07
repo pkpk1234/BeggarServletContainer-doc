@@ -55,5 +55,41 @@ public class SocketEventListener implements EventListener<Socket> {
 
 重构Connector，添加事件机制
 
+```java
+public class SocketConnector extends Connector<Socket> {
+    ... ...
+    private final EventListener<Socket> eventListener;
+
+    public SocketConnector(int port, EventListener<Socket> eventListener) {
+        this.port = port;
+        this.eventListener = eventListener;
+    }
+    
+    @Override
+    protected void acceptConnect() throws ConnectorException {
+        new Thread(() -> {
+            while (true && started) {
+                Socket socket = null;
+                try {
+                    socket = serverSocket.accept();
+                    whenAccept(socket);
+                } catch (Exception e) {
+                    //单个Socket异常，不要影响整个Connector
+                    LOGGER.error(e.getMessage(), e);
+                } finally {
+                    IoUtils.closeQuietly(socket);
+                }
+            }
+        }).start();
+    }
+
+    @Override
+    protected void whenAccept(Socket socketConnect) throws ConnectorException {
+        eventListener.onEvent(socketConnect);
+    }
+    ... ...
+}
+```
+
 
 
