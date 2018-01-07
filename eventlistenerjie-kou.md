@@ -64,7 +64,7 @@ public class SocketConnector extends Connector<Socket> {
         this.port = port;
         this.eventListener = eventListener;
     }
-    
+
     @Override
     protected void acceptConnect() throws ConnectorException {
         new Thread(() -> {
@@ -88,6 +88,22 @@ public class SocketConnector extends Connector<Socket> {
         eventListener.onEvent(socketConnect);
     }
     ... ...
+}
+```
+
+重构ServerFactory，添加对具体实现的依赖
+
+```java
+public class ServerFactory {
+    
+    public static Server getServer(ServerConfig serverConfig) {
+        List<Connector> connectorList = new ArrayList<>();
+        SocketEventListener socketEventListener = new SocketEventListener();
+        ConnectorFactory connectorFactory =
+                new SocketConnectorFactory(new SocketConnectorConfig(serverConfig.getPort()), socketEventListener);
+        connectorList.add(connectorFactory.getConnector());
+        return new SimpleServer(serverConfig, connectorList);
+    }
 }
 ```
 
