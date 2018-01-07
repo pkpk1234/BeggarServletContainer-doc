@@ -169,5 +169,15 @@ public class BootStrap {
 }
 ```
 
+服务器启动后，使用telnet进行验证，如下：
 
+![](/assets/test-echo.jpg)
+
+到现在为止，我们的服务器终于有了实际功能，下一步终于可以去实现请求静态资源的功能了。
+
+完整代码：https://github.com/pkpk1234/BeggarServletContainer/tree/step4
+
+分支step4
+
+![](/assets/git-br-step4.jpg)
 
