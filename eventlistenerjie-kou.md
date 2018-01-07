@@ -159,7 +159,15 @@ public class SocketEventListener implements EventListener<Socket> {
 
 之前都是在单元测试里面启动Server的，这次需要启动Server后，用telnet去使用echo功能，所以再为Server编写一个启动类，在其main方法里面启动Server
 
-
+```java
+public class BootStrap {
+    public static void main(String[] args) throws IOException {
+        ServerConfig serverConfig = new ServerConfig();
+        Server server = ServerFactory.getServer(serverConfig);
+        server.start();
+    }
+}
+```
 
 
 
