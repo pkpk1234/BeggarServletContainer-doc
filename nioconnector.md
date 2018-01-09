@@ -135,5 +135,31 @@ public class NIOEchoEventHandler extends AbstractEventHandler<SelectionKey> {
 }
 ```
 
+修改ServerFactory，添加NIO功能，这里的代码也是有很大设计缺陷的，ServerFactory只应该根据传入的config信息构造Server，而不是每次都去改工厂。
+
+```java
+public class ServerFactory {
+    /**
+     * 返回Server实例
+     *
+     * @return
+     */
+    public static Server getServer(ServerConfig serverConfig) {
+        List<Connector> connectorList = new ArrayList<>();
+        SocketEventListener socketEventListener =
+                new SocketEventListener(new FileEventHandler(System.getProperty("user.dir")));
+        ConnectorFactory connectorFactory =
+                new SocketConnectorFactory(new SocketConnectorConfig(serverConfig.getPort()), socketEventListener);
+
+        NIOEventListener nioEventListener = new NIOEventListener(new NIOEchoEventHandler());
+        SocketChannelConnector socketChannelConnector = new SocketChannelConnector(18081,nioEventListener);
+
+        connectorList.add(connectorFactory.getConnector());
+        connectorList.add(socketChannelConnector);
+        return new SimpleServer(connectorList);
+    }
+}
+```
+
 
 
