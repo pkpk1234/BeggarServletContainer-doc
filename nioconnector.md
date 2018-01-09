@@ -150,8 +150,9 @@ public class ServerFactory {
                 new SocketEventListener(new FileEventHandler(System.getProperty("user.dir")));
         ConnectorFactory connectorFactory =
                 new SocketConnectorFactory(new SocketConnectorConfig(serverConfig.getPort()), socketEventListener);
-
+        //NIO
         NIOEventListener nioEventListener = new NIOEventListener(new NIOEchoEventHandler());
+        //监听18081端口
         SocketChannelConnector socketChannelConnector = new SocketChannelConnector(18081,nioEventListener);
 
         connectorList.add(connectorFactory.getConnector());
@@ -160,6 +161,8 @@ public class ServerFactory {
     }
 }
 ```
+
+运行BootStrap，启动Server，telnet访问18081端口
 
 
 
