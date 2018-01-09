@@ -47,7 +47,7 @@ public class SimpleServer implements Server {
 }
 ```
 
-添加HOST属性绑定IP，添加backLog属性设置ServerSocket的TCP属性SO\_BACKLOG。修改init方法，支持绑定IP。
+添加HOST属性绑定IP，添加backLog属性设置ServerSocket的TCP属性SO\_BACKLOG。修改init方法，支持ServerSocket绑定IP。
 
 ```java
 public class SocketConnector extends AbstractConnector<Socket> {
