@@ -87,5 +87,7 @@ public class SocketConnector extends AbstractConnector<Socket> {
     }
 ```
 
+执行单元测试，一切OK。现在可以开始添加NIO了。
+
 
 
