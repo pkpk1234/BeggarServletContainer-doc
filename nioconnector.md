@@ -162,7 +162,13 @@ public class ServerFactory {
 }
 ```
 
-运行BootStrap，启动Server，telnet访问18081端口
+运行BootStrap，启动Server，telnet访问18081端口，功能是勉强实现了，但是架构设计是有重大缺陷的，进一步添加功能之前，需要重构好架构才行。
 
+![](/assets/nio-echo-server.jpg)
 
+完整代码：https://github.com/pkpk1234/BeggarServletContainer/tree/step6
+
+分支step6
+
+![](/assets/git-br-step6.jpg)
 
