@@ -1,6 +1,4 @@
-```
-NIOConnector
-```
+# NIOConnector
 
 现在为Server添加NIOConnector，添加之前可以发现我们的代码其实是有问题的。比如现在的代码是无法让服务器支持同时监听多个端口和IP的，如同时监听 127.0.0.1:18080和0.0.0.0:18443现在是无法做到的。因为当期的端口号是Server的属性，并且只有一个，但是端口其实应该是Connector的属性，因为Connector专门负责了Server的IO。
 
@@ -166,7 +164,7 @@ public class ServerFactory {
 
 ![](/assets/nio-echo-server.jpg)
 
-完整代码：https://github.com/pkpk1234/BeggarServletContainer/tree/step6
+完整代码：[https://github.com/pkpk1234/BeggarServletContainer/tree/step6](https://github.com/pkpk1234/BeggarServletContainer/tree/step6)
 
 分支step6
 
