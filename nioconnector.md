@@ -1,0 +1,12 @@
+# NIOConnector
+
+现在为Server添加NIOConnector，添加之前可以发现我们的代码其实是有问题的。比如现在的代码是无法让服务器支持同时监听多个端口和IP的。因为端口号是Server的属性，并且只有一个，但是端口其实应该是Connector的属性，因为Connector专门负责了Server的IO。
+
+重构一下，将端口号从Server中去掉，取而代之的是Connector列表；将当期的Connector抽象类重命名为AbstractConnector，再新建接口Connector，添加getPort和getHost两个方法，让Connector支持将监听绑定到不同IP的功能。
+
+
+
+
+
+
+
