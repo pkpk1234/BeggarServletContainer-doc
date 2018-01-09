@@ -1,4 +1,6 @@
-# NIOConnector
+```
+NIOConnector
+```
 
 现在为Server添加NIOConnector，添加之前可以发现我们的代码其实是有问题的。比如现在的代码是无法让服务器支持同时监听多个端口和IP的，如同时监听 127.0.0.1:18080和0.0.0.0:18443现在是无法做到的。因为当期的端口号是Server的属性，并且只有一个，但是端口其实应该是Connector的属性，因为Connector专门负责了Server的IO。
 
@@ -89,7 +91,7 @@ public class SocketConnector extends AbstractConnector<Socket> {
 
 执行单元测试，一切OK。现在可以开始添加NIO了。
 
-根据前面一步一步搭建的架构，需要添加支持NIO的Connector、EventListener和EventHandler三个实现即可。
+根据前面一步一步搭建的架构，需要添加支持NIO的EventListener和EventHandler两个实现即可。
 
 NIOEventListener中莫名其妙出现了SelectionKey，表面这个类和SelectionKey是强耦合的，说明之前的架构设计是很烂的，势必又要重构，今天先不改了，完成功能先。
 
@@ -104,6 +106,31 @@ public class NIOEventListener extends AbstractEventListener<SelectionKey> {
     @Override
     protected EventHandler<SelectionKey> getEventHandler(SelectionKey event) {
         return this.eventHandler;
+    }
+}
+```
+
+同意的道理，NIOEchoEventHandler也不应该和SelectionKey强耦合，echo功能简单，如果是返回文件内容的功能，那样的话，大段大段的文件读写代码是完全无法复用的。
+
+```java
+public class NIOEchoEventHandler extends AbstractEventHandler<SelectionKey> {
+    @Override
+    protected void doHandle(SelectionKey key) {
+        try {
+            if (key.isReadable()) {
+                SocketChannel client = (SocketChannel) key.channel();
+                ByteBuffer output = (ByteBuffer) key.attachment();
+                client.read(output);
+            } else if (key.isWritable()) {
+                SocketChannel client = (SocketChannel) key.channel();
+                ByteBuffer output = (ByteBuffer) key.attachment();
+                output.flip();
+                client.write(output);
+                output.compact();
+            }
+        } catch (IOException e) {
+            throw new HandlerException(e);
+        }
     }
 }
 ```
