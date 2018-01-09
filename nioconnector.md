@@ -6,3 +6,18 @@
 
 
 
+```java
+public class SimpleServer implements Server {
+    private static Logger logger = LoggerFactory.getLogger(SimpleServer.class);
+    private volatile ServerStatus serverStatus = ServerStatus.STOPED;
+    private final List<AbstractConnector> connectorList;
+
+    public SimpleServer(List<AbstractConnector> connectorList) {
+        this.connectorList = connectorList;
+    }
+    ... ...
+}
+```
+
+
+
