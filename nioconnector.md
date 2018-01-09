@@ -4,6 +4,8 @@
 
 重构一下，将端口号从Server中去掉，取而代之的是Connector列表；将当期的Connector抽象类重命名为AbstractConnector，再新建接口Connector，添加getPort和getHost两个方法，让Connector支持将监听绑定到不同IP的功能。
 
+去掉getPort方法
+
 ```java
 public interface Server {
     /**
@@ -29,6 +31,8 @@ public interface Server {
     List<Connector> getConnectorList();
 }
 ```
+
+去掉port属性和方法
 
 ```java
 public class SimpleServer implements Server {
