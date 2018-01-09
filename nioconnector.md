@@ -47,5 +47,45 @@ public class SimpleServer implements Server {
 }
 ```
 
+添加HOST属性绑定IP，添加backLog属性设置ServerSocket的TCP属性SO\_BACKLOG。修改init方法，支持绑定IP。
+
+```java
+public class SocketConnector extends AbstractConnector<Socket> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SocketConnector.class);
+    private static final String LOCALHOST = "localhost";
+    private static final int DEFAULT_BACKLOG = 50;
+    private final int port;
+    private final String host;
+    private final int backLog;
+    private ServerSocket serverSocket;
+    private volatile boolean started = false;
+    private final EventListener<Socket> eventListener;
+
+    public SocketConnector(int port, EventListener<Socket> eventListener) {
+        this(port, LOCALHOST, DEFAULT_BACKLOG, eventListener);
+    }
+
+    public SocketConnector(int port, String host, int backLog, EventListener<Socket> eventListener) {
+        this.port = port;
+        this.host = StringUtils.isBlank(host) ? LOCALHOST : host;
+        this.backLog = backLog;
+        this.eventListener = eventListener;
+    }
+
+
+    @Override
+    protected void init() throws ConnectorException {
+
+        //监听本地端口，如果监听不成功，抛出异常
+        try {
+            InetAddress inetAddress = InetAddress.getByName(this.host);
+            this.serverSocket = new ServerSocket(this.port, backLog, inetAddress);
+            this.started = true;
+        } catch (IOException e) {
+            throw new ConnectorException(e);
+        }
+    }
+```
+
 
 
