@@ -89,5 +89,24 @@ public class SocketConnector extends AbstractConnector<Socket> {
 
 执行单元测试，一切OK。现在可以开始添加NIO了。
 
+根据前面一步一步搭建的架构，需要添加支持NIO的Connector、EventListener和EventHandler三个实现即可。
+
+NIOEventListener中莫名其妙出现了SelectionKey，表面这个类和SelectionKey是强耦合的，说明之前的架构设计是很烂的，势必又要重构，今天先不改了，完成功能先。
+
+```java
+public class NIOEventListener extends AbstractEventListener<SelectionKey> {
+    private final EventHandler<SelectionKey> eventHandler;
+
+    public NIOEventListener(EventHandler<SelectionKey> eventHandler) {
+        this.eventHandler = eventHandler;
+    }
+
+    @Override
+    protected EventHandler<SelectionKey> getEventHandler(SelectionKey event) {
+        return this.eventHandler;
+    }
+}
+```
+
 
 
