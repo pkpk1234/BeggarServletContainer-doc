@@ -4,3 +4,5 @@
 
 而在Connection上读取和写入数据，则可以使用ConnectionReader和ConnectionWriter进行操作，这样对Connector来说，就不用在意底层底层是Socket还是SocketChannel了，而对于需要对读写数据的类来说，只需要知道ConnectionReader可以读取数据，而ConnectionWriter可以写入数据，底层是Socket还是SocketChannel都是透明的。
 
+
+
