@@ -8,9 +8,9 @@ NIO的接口和BIO的接口差别实在太大了，没办法只能加了一个�
 
 每当Connector接受到请求时，就构造一个Connection，Connector将Connection传递给EventListener，EventListener再传递给EventHandler。EventHandler调用Connection获取请求数据，并写入响应数据。
 
-之后如果需要加入Servlet的功能，则需要添加对于的EventHandler，再通过EventHandler将请求Dispatcher到相应的Servlet中。
+之后如果需要加入Servlet的功能，则需要添加对于的EventHandler，再通过EventHandler将请求Dispatcher到相应的Servlet中，而服务器的其余部分基本不用修改。
 
-面向对象的设计模式功力比较弱，先设计一个勉强能用的架构先。
+面向对象的设计模式功力比较弱，先设计一个勉强能用的架构先。这样单线程Server的IO部分基本就搞好了。
 
 完整代码：[https://github.com/pkpk1234/BeggarServletContainer/tree/step6](https://github.com/pkpk1234/BeggarServletContainer/tree/step6)
 
