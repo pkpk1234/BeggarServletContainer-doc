@@ -2,7 +2,7 @@
 
 继续抽象的过程，无论Socket还是SocketChannle，其实都可以抽象为一个表示通信连接的Connection接口。每当Connector监听到端口有请求时，即建立了一个Connection。
 
-NIO的接口和BIO的接口差别实在太大了，没办法只能加了一个不伦不类的ChannelConnection接口，肯定有更好的方案，但是以我现在的水平暂时只能这样设计下了。
+NIO的接口和BIO的接口差别实在太大了，没办法只能加了一个不伦不类的ChannelConnection接口，肯定有更好的方案，但是以我现在的水平暂时只能这样设计下了。等以后看了Netty或者Undertow的源码再重构吧。
 
 重构后UML大致如下：![](/assets/UML.jpg)Server包含了1个或者多个Connector，Connector包含一个EventListener，一个EventListener包含一个EventHandler。
 
