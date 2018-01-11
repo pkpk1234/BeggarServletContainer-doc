@@ -4,5 +4,7 @@
 
 NIO的接口和BIO的接口差别实在太大了，没办法只能加了一个不伦不类的ChannelConnection接口，肯定有更好的方案，但是以为的水平暂时只能这样设计下了。
 
+重构后UML大致如下：![](/assets/UML.jpg)Server包含了1个或者多个Connector，Connector包含一个EventListener，一个EventListener包含一个EventHandler。
 
+每当Connector接受到请求时，就构造一个Connection，Connector将Connection传递给EventListener，EventListener再传递给EventHandler。EventHandler调用Connection获取请求数据，并写入响应数据。
 
