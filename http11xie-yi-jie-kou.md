@@ -30,13 +30,15 @@ Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
 Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
 ```
 
-转换为Java后，结构如下
+转换为Java后，结构如下![](/assets/http-interface-diagrams.jpg)
 
-![](/assets/http-interface-diagrams.jpg)StartLine用于表示开始行，RequestLine和ResponseLine都实现该接口，同时添加了返回特定各自信息的方法。
+StartLine用于表示开始行，RequestLine和ResponseLine都实现该接口，同时添加了返回特定各自信息的方法。
 
 HttBody用表示Body内容，使用泛型指定Body内容的格式，StringContentHttBody表示Body的内容是字符串，ByteContentHttBody表示Body内容是二进制，并与InputStream进行返回。
 
 IMessageHeaders用户持有所有的HttpHeader。HttpMessageHeaders内部使用Guava的ArrayListMultimap&lt;String, HttpHeader&gt;保持HttpHeader，以实现对同名多个消息头的支持。
 
 
+
+完整代码：
 
