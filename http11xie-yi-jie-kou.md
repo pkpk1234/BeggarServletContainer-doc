@@ -20,9 +20,11 @@ generic-message = start-line
 3. 空行
 4. 消息体
 
-开始行有分为请求开始行和响应开始行两类
+开始行有分为请求开始行和响应开始行两类：SP代表空白字符
 
-
+```
+Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
+```
 
 
 
