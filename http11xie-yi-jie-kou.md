@@ -38,7 +38,11 @@ HttBody用表示Body内容，使用泛型指定Body内容的格式，StringConte
 
 IMessageHeaders用户持有所有的HttpHeader。HttpMessageHeaders内部使用Guava的ArrayListMultimap&lt;String, HttpHeader&gt;保持HttpHeader，以实现对同名多个消息头的支持。
 
+HttpMessage接口则同时使用 StartLine、IMessageHeaders、HttpBody三个接口，用于表示HTTP Message。
 
+完整代码：https://github.com/pkpk1234/BeggarServletContainer/tree/step7
 
-完整代码：
+分支step7
+
+![](/assets/git-br-step7.jpg)
 
