@@ -36,5 +36,7 @@ Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
 
 HttBody用表示Body内容，使用泛型指定Body内容的格式，StringContentHttBody表示Body的内容是字符串，ByteContentHttBody表示Body内容是二进制，并与InputStream进行返回。
 
+IMessageHeaders用户持有所有的HttpHeader。HttpMessageHeaders内部使用Guava的ArrayListMultimap&lt;String, HttpHeader&gt;保持HttpHeader，以实现对同名多个消息头的支持。
+
 
 
