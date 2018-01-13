@@ -26,5 +26,9 @@ generic-message = start-line
 Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
 ```
 
+```
+Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
+```
+
 
 
