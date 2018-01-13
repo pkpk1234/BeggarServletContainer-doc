@@ -30,5 +30,7 @@ Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
 Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
 ```
 
+转换为Java后，结构如下
 
+![](/assets/http-interface-diagrams.jpg)StartLine用于返回开始行，RequestLine和ResponseLine都实现该接口，同时添加了返回特定各自信息的方法。
 
