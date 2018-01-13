@@ -32,5 +32,9 @@ Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
 
 转换为Java后，结构如下
 
-![](/assets/http-interface-diagrams.jpg)StartLine用于返回开始行，RequestLine和ResponseLine都实现该接口，同时添加了返回特定各自信息的方法。
+![](/assets/http-interface-diagrams.jpg)StartLine用于表示开始行，RequestLine和ResponseLine都实现该接口，同时添加了返回特定各自信息的方法。
+
+HttBody用表示Body内容，使用泛型指定Body内容的格式，StringContentHttBody表示Body的内容是字符串，ByteContentHttBody表示Body内容是二进制，并与InputStream进行返回。
+
+
 
