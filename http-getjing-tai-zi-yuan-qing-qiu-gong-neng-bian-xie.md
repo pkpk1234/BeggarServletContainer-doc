@@ -8,13 +8,17 @@ HTTP协议处理真是麻烦，早知道找个现成HTTP框架，只编写Servle
 public abstract class AbstractHttpEventHandler extends AbstractEventHandler<Connection> {
     @Override
     protected void doHandle(Connection connection) {
+        //从输入中构造出HTTP请求对象,Body的内容是延迟读取
         HttpRequestMessage requestMessage = doParserRequestMessage(connection);
+        //构造HTTP响应对象
         HttpResponseMessage responseMessage = doGenerateResponseMessage(requestMessage);
         try {
+            //输出响应到客户端
             doTransferToClient(responseMessage, connection);
         } catch (IOException e) {
             throw new HandlerException(e);
         } finally {
+            //完成响应后，关闭Socket
             if (connection instanceof SocketConnection) {
                 IOUtils.closeQuietly(((SocketConnection) connection).getSocket());
             }
