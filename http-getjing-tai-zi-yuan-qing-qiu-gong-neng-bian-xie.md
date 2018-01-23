@@ -168,5 +168,77 @@ RequestLine解析时会设置Http请求方法和queryString到HttpParserContext�
     }
 ```
 
+QueryParameter的解析很简单，直接调用HttpQueryParameterParser即可。
+
+HttpHeader解析流程为从HttpParserContext中取出请求报文，去掉第一行，然后逐行处理，构造成key-value的形式保存起来。
+
+同时，通过Content-Length头或者Transfer-Encoding判断请求是否包含Body。
+
+```java
+public class DefaultHttpHeaderParser extends AbstractParser implements HttpHeaderParser {
+    private static final String SPLITTER = ":";
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultHttpHeaderParser.class);
+
+    @Override
+    public HttpMessageHeaders parse() {
+        try {
+            String httpText = getHttpTextFromContext();
+            HttpMessageHeaders httpMessageHeaders = doParseHttpMessageHeaders(httpText);
+            setHasBody(httpMessageHeaders);
+            return httpMessageHeaders;
+        } catch (UnsupportedEncodingException e) {
+            throw new ParserException("Unsupported Encoding", e);
+        }
+    }
+
+    /**
+     * 从上下文获取bytes并转换为String
+     *
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    private String getHttpTextFromContext() throws UnsupportedEncodingException {
+        byte[] bytes = HttpParserContext.getHttpMessageBytes();
+        return new String(bytes, "utf-8");
+    }
+
+    /**
+     * 解析Body之前的文本构建HttpHeader，并保存到HttpMessageHeaders中
+     *
+     * @param httpText
+     * @return
+     */
+    private HttpMessageHeaders doParseHttpMessageHeaders(String httpText) {
+        HttpMessageHeaders httpMessageHeaders = new HttpMessageHeaders();
+        String[] lines = httpText.split(CRLF);
+        //跳过第一行
+        for (int i = 1; i < lines.length; i++) {
+            String keyValue = lines[i];
+            if ("".equals(keyValue)) {
+                break;
+            }
+            String[] temp = keyValue.split(SPLITTER);
+            if (temp.length == 2) {
+                httpMessageHeaders.addHeader(new HttpHeader(temp[0], temp[1].trim()));
+            }
+        }
+        return httpMessageHeaders;
+    }
+
+    /**
+     * 设置报文是否包含Body到上下文中
+     */
+    private void setHasBody(HttpMessageHeaders httpMessageHeaders) {
+        if (httpMessageHeaders.hasHeader("Content-Length")
+                || (httpMessageHeaders.getFirstHeader("Transfer-Encoding") != null
+                    && "chunked".equals(httpMessageHeaders.getFirstHeader("Transfer-Encoding").getValue())))
+        {
+            HttpParserContext.setHasBody(true);
+        }
+    }
+}
+
+```
+
 
 
