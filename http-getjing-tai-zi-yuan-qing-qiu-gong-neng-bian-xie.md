@@ -418,11 +418,13 @@ div.innerHTML = content;
 
 本地测试：
 
-用浏览器访问http://localhost:18083/web/index.html
+用浏览器访问[http://localhost:18083/web/index.html](http://localhost:18083/web/index.html)
 
 显示如下
 
 ![](/assets/html.png)
 
-完整代码：https://github.com/pkpk1234/BeggarServletContainer/tree/step9
+完整代码：[https://github.com/pkpk1234/BeggarServletContainer/tree/step9](https://github.com/pkpk1234/BeggarServletContainer/tree/step9)
+
+//TODO: 整理写死的字符串
 
