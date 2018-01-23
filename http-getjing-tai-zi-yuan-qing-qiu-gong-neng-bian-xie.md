@@ -59,7 +59,9 @@ public abstract class AbstractHttpEventHandler extends AbstractEventHandler<Conn
 
 ## 构造出HTTP请求对象
 
-还是先定下处理流程
+还是先定下处理流程，首先构造RequestLine、然后构造QueryParameter和Headers，如果有Body，则构造Body。
+
+整个过程，需要多个parser参与，并且有parser的输出是另外的parser的输入，所有这里通过ThreadLocal来保存这些在多个parser之间共享的变量，保存在HttpParserContext中。
 
 ```java
 public abstract class AbstractHttpRequestMessageParser extends AbstractParser implements HttpRequestMessageParser {
