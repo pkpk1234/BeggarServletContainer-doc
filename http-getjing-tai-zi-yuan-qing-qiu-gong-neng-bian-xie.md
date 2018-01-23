@@ -383,8 +383,12 @@ ServerConfig serverConfig = ServerConfig.builder()
                 .addConnector(connector3)
                 .build();
         Server server = ServerFactory.getServer(serverConfig);
-        server.start();                
+        server.start();
 ```
+
+新建web目录，添加html、图片和js
+
+![](/assets/web_dir.png)
 
 
 
