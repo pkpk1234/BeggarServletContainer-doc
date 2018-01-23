@@ -11,4 +11,5 @@
 * [Connection接口](connectionconnectionreaderconnectionwriterjie-kou.md)
 * [HTTP1.1协议接口](http11xie-yi-jie-kou.md)
 * [HTTP请求parse流程、RequestLineParser、HttpQueryParameterParser](http-parser-flow-request-line-parse.md)
+* [HTTP Get静态资源请求功能编写](http-getjing-tai-zi-yuan-qing-qiu-gong-neng-bian-xie.md)
 
