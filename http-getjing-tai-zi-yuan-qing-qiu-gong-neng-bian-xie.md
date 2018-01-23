@@ -390,5 +390,39 @@ ServerConfig serverConfig = ServerConfig.builder()
 
 ![](/assets/web_dir.png)
 
+index.html
 
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello Beggar Servlet Container</title>
+</head>
+<body>
+<img src="spring.jpg">
+<div id="content"></div>
+<script src="index.js"></script>
+</body>
+</html>
+```
+
+index.js
+
+```js
+var date = new Date();
+var content = "now is " + date;
+var div = document.querySelector("#content");
+div.innerHTML = content;
+```
+
+本地测试：
+
+用浏览器访问http://localhost:18083/web/index.html
+
+显示如下
+
+![](/assets/html.png)
+
+完整代码：https://github.com/pkpk1234/BeggarServletContainer/tree/step9
 
