@@ -365,5 +365,26 @@ public class HttpStaticResourceEventHandler extends AbstractHttpEventHandler {
 }
 ```
 
+## 启动服务器测试
+
+修改BootStrap，添加对应功能
+
+```java
+EventListener<Connection> socketEventListener3 =
+                new ConnectionEventListener(
+                    new HttpStaticResourceEventHandler(System.getProperty("user.dir"),
+                        new DefaultHttpRequestMessageParser(new DefaultHttpRequestLineParser(),
+                                new DefaultHttpQueryParameterParser(),
+                                new DefaultHttpHeaderParser(),
+                                new DefaultHttpBodyParser())));
+SocketConnector connector3 =
+                SocketConnectorFactory.build(18083, socketEventListener3);
+ServerConfig serverConfig = ServerConfig.builder()
+                .addConnector(connector3)
+                .build();
+        Server server = ServerFactory.getServer(serverConfig);
+        server.start();                
+```
+
 
 
