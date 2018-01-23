@@ -156,5 +156,17 @@ public abstract class AbstractHttpRequestMessageParser extends AbstractParser im
 }
 ```
 
+RequestLine解析时会设置Http请求方法和queryString到HttpParserContext中，作为QueryParameter解析的输入。
+
+```java
+    @Override
+    protected RequestLine parseRequestLine() {
+        RequestLine requestLine = this.httpRequestLineParser.parse();
+        HttpParserContext.setHttpMethod(requestLine.getMethod());
+        HttpParserContext.setRequestQueryString(requestLine.getRequestURI().getQuery());
+        return requestLine;
+    }
+```
+
 
 
