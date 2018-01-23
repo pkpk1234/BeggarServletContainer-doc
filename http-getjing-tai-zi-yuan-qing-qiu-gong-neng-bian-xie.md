@@ -63,6 +63,8 @@ public abstract class AbstractHttpEventHandler extends AbstractEventHandler<Conn
 
 整个过程，需要多个parser参与，并且有parser的输出是另外的parser的输入，所有这里通过ThreadLocal来保存这些在多个parser之间共享的变量，保存在HttpParserContext中。
 
+这里通过copyRequestBytesBeforeBody方法确定是否具有body，同时将body之前字节都保存起来。
+
 ```java
 public abstract class AbstractHttpRequestMessageParser extends AbstractParser implements HttpRequestMessageParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractHttpRequestMessageParser.class);
