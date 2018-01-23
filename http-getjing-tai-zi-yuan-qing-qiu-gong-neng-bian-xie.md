@@ -237,7 +237,43 @@ public class DefaultHttpHeaderParser extends AbstractParser implements HttpHeade
         }
     }
 }
+```
 
+如果请求包含了Body，就从InputStream中读取Content-Length长度的内容作为Body内容。Transfer-Encoding的暂时没处理，后续再加。
+
+```java
+public class DefaultHttpBodyParser implements HttpBodyParser {
+    @Override
+    public HttpBody parse() {
+        int contentLength = HttpParserContext.getBodyInfo().getContentLength();
+        InputStream inputStream = HttpParserContext.getInputStream();
+        try {
+            byte[] body = IOUtils.readFully(inputStream, contentLength);
+            String contentType = HttpParserContext.getContentType();
+            String encoding = getEncoding(contentType);
+            HttpBody httpBody =
+                    new HttpBody(contentType, encoding, body);
+            return httpBody;
+        } catch (IOException e) {
+            throw new ParserException(e);
+        }
+    }
+
+    /**
+     * 获取encoding
+     * 例如：Content-type: application/json; charset=utf-8
+     *
+     * @param contentType
+     * @return
+     */
+    private String getEncoding(String contentType) {
+        String encoding = "utf-8";
+        if (StringUtils.isNotBlank(contentType) && contentType.contains(";")) {
+            encoding = contentType.split(";")[1].trim().replace("charset=", "");
+        }
+        return encoding;
+    }
+}
 ```
 
 
