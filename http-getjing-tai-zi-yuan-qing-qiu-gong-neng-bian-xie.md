@@ -57,5 +57,9 @@ public abstract class AbstractHttpEventHandler extends AbstractEventHandler<Conn
 }
 ```
 
+## 构造出HTTP请求对象
+
+
+
 
 
