@@ -276,5 +276,94 @@ public class DefaultHttpBodyParser implements HttpBodyParser {
 }
 ```
 
+到此为止HTTP请求对象构造完毕。
+
+## 编写静态资源Handler
+
+在AbstractHttpEventHandler的基础上，添加静态资源返回功能。
+
+总体流程为：从HTTP请求对象中获取到请求路径，在docBase目录下查找对应路径的资源并返回。
+
+需要注意的是不同类型文件的Content-Type响应头需要设置正确，否则文件不会正确显示。
+
+```java
+public class HttpStaticResourceEventHandler extends AbstractHttpEventHandler {
+
+    private final String docBase;
+    private final AbstractHttpRequestMessageParser httpRequestMessageParser;
+
+    public HttpStaticResourceEventHandler(String docBase,
+                                          AbstractHttpRequestMessageParser httpRequestMessageParser) {
+        this.docBase = docBase;
+        this.httpRequestMessageParser = httpRequestMessageParser;
+    }
+
+    @Override
+    protected HttpRequestMessage doParserRequestMessage(Connection connection) {
+        try {
+            HttpRequestMessage httpRequestMessage = httpRequestMessageParser
+                    .parse(connection.getInputStream());
+            return httpRequestMessage;
+        } catch (IOException e) {
+            throw new HandlerException(e);
+        }
+    }
+
+    @Override
+    protected HttpResponseMessage doGenerateResponseMessage(
+            HttpRequestMessage httpRequestMessage) {
+        String path = httpRequestMessage.getRequestLine().getRequestURI().getPath();
+        Path filePath = Paths.get(docBase, path);
+        //目录、无法读取的文件都返回404
+        if (Files.isDirectory(filePath) || !Files.isReadable(filePath)) {
+            return HttpResponseConstants.HTTP_404;
+        } else {
+            ResponseLine ok = ResponseLineConstants.RES_200;
+            HttpMessageHeaders headers = HttpMessageHeaders.newBuilder()
+                    .addHeader("status", "200").build();
+            HttpBody httpBody = null;
+            try {
+                setContentType(filePath, headers);
+                httpBody = new HttpBody(new FileInputStream(filePath.toFile()));
+            } catch (FileNotFoundException e) {
+                return HttpResponseConstants.HTTP_404;
+            } catch (IOException e) {
+                throw new HandlerException(e);
+            }
+            HttpResponseMessage httpResponseMessage = new HttpResponseMessage(ok, headers,
+                    Optional.ofNullable(httpBody));
+            return httpResponseMessage;
+        }
+
+    }
+
+    /**
+     * 根据文件后缀设置文件Content-Type
+     *
+     * @param filePath
+     * @param headers
+     * @throws IOException
+     */
+    private void setContentType(Path filePath, HttpMessageHeaders headers) throws IOException {
+        //使用Files.probeContentType在mac上总是返回null
+        //String contentType = Files.probeContentType(filePath);
+        String contentType = MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(filePath.toString());
+        headers.addHeader(new HttpHeader("Content-Type", contentType));
+        if (contentType.indexOf("text") == -1) {
+            headers.addHeader(new HttpHeader("Content-Length",
+                    String.valueOf(filePath.toFile().length())));
+        }
+    }
+
+    @Override
+    protected void doTransferToClient(HttpResponseMessage responseMessage,
+                                      Connection connection) throws IOException {
+        HttpResponseMessageWriter httpResponseMessageWriter = new HttpResponseMessageWriter();
+        httpResponseMessageWriter.write(responseMessage, connection);
+    }
+
+}
+```
+
 
 
