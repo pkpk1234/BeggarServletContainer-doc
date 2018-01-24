@@ -419,7 +419,15 @@ div.innerHTML = content;
 
 main.css
 
+```js
+body {
+    background-color: antiquewhite;
+}
 
+#content {
+    background-color: cornflowerblue;
+}
+```
 
 本地测试：
 
