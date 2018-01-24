@@ -435,7 +435,7 @@ body {
 
 显示如下
 
-![](/assets/html.png)
+![](/assets/web.jpg)
 
 完整代码：[https://github.com/pkpk1234/BeggarServletContainer/tree/step9](https://github.com/pkpk1234/BeggarServletContainer/tree/step9)
 
