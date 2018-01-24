@@ -398,6 +398,7 @@ index.html
 <head>
     <meta charset="UTF-8">
     <title>Hello Beggar Servlet Container</title>
+    <link type="text/css" rel="stylesheet" href="main.css" />
 </head>
 <body>
 <img src="spring.jpg">
