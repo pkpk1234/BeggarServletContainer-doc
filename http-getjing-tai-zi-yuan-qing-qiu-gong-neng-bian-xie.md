@@ -388,7 +388,7 @@ ServerConfig serverConfig = ServerConfig.builder()
 
 新建web目录，添加html、图片和js
 
-![](/assets/web_dir.png)
+![](/assets/web-dirs.jpg)
 
 index.html
 
