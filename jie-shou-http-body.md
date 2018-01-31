@@ -99,5 +99,7 @@ public class HttpBodyInputStream extends InputStream {
 }
 ```
 
+此处BodyParser并不处理压缩和编码，只是直接返回raw body，使用处再根据实际情况进行处理。
+
 
 
