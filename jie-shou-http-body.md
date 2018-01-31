@@ -22,5 +22,7 @@ chunked的Body格式为：
 
 [https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Transfer-Encoding](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Transfer-Encoding)
 
+所以chunked的Body使用 0\r\n\r\n 作为Body的结束标志。
+
 
 
