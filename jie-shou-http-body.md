@@ -24,5 +24,7 @@ chunked的Body格式为：
 
 所以chunked的Body使用 0\r\n\r\n 作为Body的结束标志。
 
+由此可以构造延迟读取Body内容的流：
+
 
 
